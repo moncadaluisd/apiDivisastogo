@@ -8,8 +8,7 @@ class AnnouncementMessage extends Model
 {
     //
     protected $table = 'announcements_messages';
-    protected $primaryKey = 'id';
-    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *

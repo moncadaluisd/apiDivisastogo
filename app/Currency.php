@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Currency extends Model
 {
     //
-    protected $table = 'currencys';
-    protected $primaryKey = 'id';
+    protected $table = 'currencies';
     public $timestamps = false;
     /**
      * The attributes that are mass assignable.

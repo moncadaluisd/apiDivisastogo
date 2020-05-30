@@ -8,8 +8,7 @@ class UserPreference extends Model
 {
     //
     protected $table = 'users_preference';
-    protected $primaryKey = 'id';
-    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *

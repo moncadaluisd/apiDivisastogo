@@ -38,6 +38,8 @@ Route::apiResource('login', 'Api\Auth\LoginController', [
   'only' => ['store']
 ]);
 
+
+
 Route::middleware(['auth.jwt'])->group(function () {
 
 Route::apiResource('me', 'Api\User\UserController', [
@@ -51,6 +53,19 @@ Route::apiResource('user/data', 'Api\User\UserDataController', [
 Route::apiResource('user/preference', 'Api\User\UserPreferenceController', [
   'only' => ['index', 'store', 'update']
 ]);
+
+Route::apiResource('announcement/create', 'Api\Announcement\CreateAnnouncementController', [
+  'only' => ['index', 'store', 'update']
+]);
+
+Route::get('announcement/request/get/{nombre}', 'Api\Announcement\RequestController@getRequest');
+Route::put('announcement/request/cancel', 'Api\Announcement\RequestController@cancelRequest');
+Route::apiResource('announcement/request', 'Api\Announcement\RequestController', [
+  'only' => ['index', 'store', 'update', 'show']
+]);
+
+
+
 
 
 
@@ -74,3 +89,6 @@ Route::group(['namespace' => 'Api\Admin', 'as' => 'admin.', 'prefix' => 'admin']
 
 });
 });
+Route::apiResource('announcement', 'Api\Announcement\AnnouncementController', [
+  'only' => ['index', 'show']
+]);

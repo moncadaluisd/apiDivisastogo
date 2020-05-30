@@ -8,7 +8,6 @@ class Category extends Model
 {
     //
     protected $table = 'categories';
-    protected $primaryKey = 'id';
     public $timestamps = false;
     /**
      * The attributes that are mass assignable.

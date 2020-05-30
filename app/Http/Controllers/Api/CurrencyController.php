@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Currency;
 
+
 class CurrencyController extends ApiController
 {
   /**
@@ -12,6 +13,21 @@ class CurrencyController extends ApiController
    *
    * @return \Illuminate\Http\Response
    */
+
+   /**
+ * @OA\Get(
+ *     path="/api/currency",
+ *     summary="Mostrar Monedas",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Mostrar todos las monedas."
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="Ha ocurrido un error."
+ *     )
+ * )
+ */
   public function index()
   {
       //
@@ -29,6 +45,8 @@ class CurrencyController extends ApiController
    * @param  int  $id
    * @return \Illuminate\Http\Response
    */
+
+
   public function show($id)
   {
       //

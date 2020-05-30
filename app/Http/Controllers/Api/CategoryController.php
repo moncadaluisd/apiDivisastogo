@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\ApiController;
 use App\Category;
 
+
 class CategoryController extends ApiController
 {
   /**
@@ -12,6 +13,20 @@ class CategoryController extends ApiController
    *
    * @return \Illuminate\Http\Response
    */
+   /**
+ * @OA\Get(
+ *     path="/api/category",
+ *     summary="Mostrar Categorias",
+ *     @OA\Response(
+ *         response=200,
+ *         description="Mostrar todos los category."
+ *     ),
+ *     @OA\Response(
+ *         response="default",
+ *         description="Ha ocurrido un error."
+ *     )
+ * )
+ */
   public function index()
   {
       //

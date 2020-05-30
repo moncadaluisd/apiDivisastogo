@@ -8,8 +8,7 @@ class Rating extends Model
 {
     //
     protected $table = 'rating';
-    protected $primaryKey = 'id';
-    public $timestamps = false;
+  
     /**
      * The attributes that are mass assignable.
      *

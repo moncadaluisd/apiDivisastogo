@@ -7,8 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Plan extends Model
 {
     //
-    protected $table = 'rating';
-    protected $primaryKey = 'id';
+    protected $table = 'plans';
     public $timestamps = false;
     /**
      * The attributes that are mass assignable.

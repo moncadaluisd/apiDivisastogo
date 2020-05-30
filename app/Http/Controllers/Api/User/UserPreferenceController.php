@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use App\UserPreference;
 use App\Http\Requests\UserPreference as Request;
 
 class UserPreferenceController extends ApiController

@@ -13,15 +13,14 @@ class User extends Authenticatable implements JWTSubject
 
     protected $table = 'users';
 
-    protected $primaryKey = 'id';
-    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-        'id_level', 'email', 'password', 'username', 'email_verify', 'phone', 'phone_verify', 'token_verify', 'verified', 'remember_token', 'google_auth_code', 'state', 'last_login','email_token', 'phone_token',
+        'id_level', 'email', 'password', 'username', 'email_verify', 'phone', 'phone_verify', 'token_verify', 'verified', 'remember_token', 'google_auth_code', 'state','email_token', 'phone_token',
     ];
 
     /**
@@ -30,7 +29,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'token_verify', 'last_login','google_auth_code','email_token', 'phone_token', 'id_level'
+        'password', 'token_verify','google_auth_code','email_token', 'phone_token', 'id_level'
     ];
 
     /*

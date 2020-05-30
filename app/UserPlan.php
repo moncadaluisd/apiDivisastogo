@@ -8,8 +8,7 @@ class UserPlan extends Model
 {
     //
     protected $table = 'users_plan';
-    protected $primaryKey = 'id';
-    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *

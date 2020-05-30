@@ -7,6 +7,7 @@ use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\UserPreference;
+use App\UserWallet;
 use App\Http\Requests\RegisterUserRequest as Request;
 
 class RegisterController extends ApiController
@@ -26,8 +27,8 @@ class RegisterController extends ApiController
       $request['id_level'] = 4;
       $request['phone_token'] = rand(100000, 999999);
       $request['email_token'] = Str::random(40);
-      $request['last_login'] = \Carbon\Carbon::now();
       $request['password'] = Hash::make($request->password);
+
 
 
       $user = User::create($request->all());
@@ -38,6 +39,11 @@ class RegisterController extends ApiController
       'notifications_movil' => 1 ,
       'notifications_email' => 1 ,
       '2fa' => 1
+      ]);
+
+      $userWallet = UserWallet::create([
+      'id_user' => $user->id,
+      'wallet' => 0
       ]);
       return $this->successResponse($user, 'Se ha creado el usuario correctamente');
 

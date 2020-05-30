@@ -8,14 +8,18 @@ class AnnouncementRequest extends Model
 {
     //
     protected $table = 'announcements_request';
-    protected $primaryKey = 'id';
-    public $timestamps = false;
+
     /**
      * The attributes that are mass assignable.
      *
      * @var array
      */
     protected $fillable = [
-         'id_announcement', 'id_user_recipient', 'moment', 'amount', 'rate', 'pay', 'state'
+         'id_announcement', 'id_user_issuer', 'amount', 'pay', 'stateIssuer', 'stateRecipient', 'price', 'min', 'max'
        ];
+
+       public function announcement()
+       {
+         return $this->belongsTo('App\Announcement', 'id_announcement');
+       }
 }
