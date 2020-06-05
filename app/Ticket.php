@@ -15,6 +15,21 @@ class Ticket extends Model
      * @var array
      */
     protected $fillable = [
-        'id_user', 'id_category', 'message', 'upload',
+        'id_user', 'id_category', 'message', 'upload', 'state',
     ];
+
+    public function user()
+    {
+      return $this->belongsTo('App\User', 'id_user');
+    }
+
+    public function category()
+    {
+      return $this->belongsTo('App\TicketCategory', 'id_category');
+    }
+
+    public function ticket()
+    {
+      return $this->hasMany('App\TicketMessage', 'id_ticket');
+    }
 }

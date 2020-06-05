@@ -17,4 +17,10 @@ class TicketMessage extends Model
     protected $fillable = [
          'id_ticket', 'id_user', 'type', 'message', 'upload'
        ];
+
+       public function user()
+       {
+         return $this->belongsTo('App\User', 'id_user');
+       }
+
 }

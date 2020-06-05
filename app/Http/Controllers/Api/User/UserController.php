@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Api\User;
 use App\Http\Controllers\ApiController;
 use App\User;
 //use Illuminate\Http\Request;
-//use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Auth;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use App\Http\Requests\RegisterUserRequest as Request;
 
@@ -19,8 +19,12 @@ class UserController extends ApiController
     public function index()
     {
         //
-        $user = User::all();
-        return $this->successResponse($user);
+        $id = Auth::id();
+        $user = User::findOrFail($id);
+        $admin = ($user->id_level == 1) ? true : false;
+        $comprador = ($user->id_level == 2) ? true : false;
+        $return = array('user' => $user, 'admin' => $admin, 'comprador' => $comprador);
+        return $this->successResponse($return);
     }
 
 
@@ -54,10 +58,6 @@ class UserController extends ApiController
     public function update(Request $request, User $user)
     {
         //
-        $token = $request->header('Autorization');
-        if (!$token) {
-          return $this->errorResponse('No hay codigo de authorizacion', 400);
-        }
 
         $user = JWTAuth::toUser($token);
         $user = $user->findOrFai($user->id)->update($request->all());

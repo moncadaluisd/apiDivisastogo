@@ -32,9 +32,7 @@ class AnnouncementRequest extends FormRequest
             'description' => 'required',
             'price' => 'required',
             'min' => 'required',
-            'max' => 'required',
-            'percetange' => 'required',
-            'state' => 'required'
+            'max' => 'required'
         ];
     }
 }

@@ -27,6 +27,7 @@ class CreateAnnouncementsTable extends Migration
             $table->boolean('percetange')->default(1);
             $table->boolean('stateIssuer')->default(0);
             $table->boolean('stateRecipient')->default(0);
+            $table->integer('state')->default(1);
 
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('id_currency_from')->references('id')->on('currencies')->onDelete('cascade');

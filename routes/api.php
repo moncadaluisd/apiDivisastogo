@@ -38,9 +38,13 @@ Route::apiResource('login', 'Api\Auth\LoginController', [
   'only' => ['store']
 ]);
 
+Route::get('/from/{from}/to/{to}', 'Api\Announcement\AnnouncementController@search');
+
 
 
 Route::middleware(['auth.jwt'])->group(function () {
+
+
 
 Route::apiResource('me', 'Api\User\UserController', [
   'only' => ['index', 'show', 'update']
@@ -54,6 +58,8 @@ Route::apiResource('user/preference', 'Api\User\UserPreferenceController', [
   'only' => ['index', 'store', 'update']
 ]);
 
+Route::get('buyer', 'Api\Announcement\CreateAnnouncementController@getBuyer');
+
 Route::apiResource('announcement/create', 'Api\Announcement\CreateAnnouncementController', [
   'only' => ['index', 'store', 'update']
 ]);
@@ -64,12 +70,12 @@ Route::apiResource('announcement/request', 'Api\Announcement\RequestController',
   'only' => ['index', 'store', 'update', 'show']
 ]);
 
+Route::post('announcement/create/{id}', 'Api\Announcement\MessageController@createMessage');
+Route::apiResource('announcement/message/', 'Api\Announcement\MessageController', [
+  'only' => ['show']
+]);
 
-
-
-
-
-
+Route::get('/user/wallet', 'Api\User\UserWalletController@index');
 
 Route::group(['namespace' => 'Api\Admin', 'as' => 'admin.', 'prefix' => 'admin'], function() {
 

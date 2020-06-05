@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers\Api\Ticket;
 
-use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Controllers\ApiController;
+use App\Ticket;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Requests\Ticket\TicketRequest as Request;
 
-class TicketController extends Controller
+class TicketController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -15,19 +17,19 @@ class TicketController extends Controller
     public function index()
     {
         //
-        
+        $ticket = Ticket::paginate(10);
+        $this->successResponse($ticket);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
+      $request['id_user'] = Auth::id();
+      $ticket = Ticket::create($request->all());
+
+      return $this->successResponse($ticket, 'Tu problema sera respondido lo antes posible');
+
     }
+
 
     /**
      * Display the specified resource.
@@ -38,6 +40,8 @@ class TicketController extends Controller
     public function show($id)
     {
         //
+        $ticket = Ticket::with(['message'])->findOrFail($id);
+        return $this->successResponse($ticket);
     }
 
     /**

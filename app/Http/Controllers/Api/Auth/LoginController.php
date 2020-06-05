@@ -31,12 +31,14 @@ class LoginController extends ApiController
       return $this->errorResponse('Error en las credenciales', 400);
     }
     $user = Auth::user();
-    $data = array('info' => $user, 'token' => $token, 'token_type' => 'Bearer');
+    $admin = ($user->id_level == 1) ? true : false;
+    $comprador = ($user->id_level == 2) ? true : false;
+    $data = array('info' => $user, 'token' => $token, 'token_type' => 'Bearer', 'admin' => $admin, 'comprador' => $comprador);
 
     $userLog = UserLog::create([
       'login_date' => \Carbon\Carbon::now(),
       'id_user' => $user->id,
-      'remote_ip' => $request->remote,
+      'remote_ip' => $request->ip(),
     ]);
     return $this->successResponse($data, 'Te has logueado correctamente');
 

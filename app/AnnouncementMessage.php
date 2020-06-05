@@ -15,6 +15,13 @@ class AnnouncementMessage extends Model
      * @var array
      */
     protected $fillable = [
-         'id_request', 'id_user', 'moment', 'message', 'upload'
+         'id_request', 'id_user', 'message', 'upload'
        ];
+
+       public function user()
+       {
+         return $this->belongsTo('App\User', 'id_user');
+       }
+
+
 }

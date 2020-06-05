@@ -8,6 +8,11 @@ use App\Http\Requests\Announcement\AnnouncementRequest as Request;
 
 class CreateAnnouncementController extends ApiController
 {
+
+    public function __construct()
+    {
+      $this->middleware('rol:3');
+    }
     /**
      * Display a listing of the resource.
      *
@@ -32,7 +37,8 @@ class CreateAnnouncementController extends ApiController
         //
         $request['id_user'] = Auth::id();
         $announcement = Announcement::create($request->all());
-        return $this->successResponse($announcement, 'Se ha creado correctamente');
+        $data = Announcement::with('user', 'category', 'currencyFrom', 'currencyTo')->findOrFail($announcement->id);
+        return $this->successResponse($data, 'Se ha creado correctamente');
 
     }
 
@@ -65,5 +71,11 @@ class CreateAnnouncementController extends ApiController
     public function destroy($id)
     {
         //
+    }
+
+    public function getBuyer()
+    {
+      $announcement = Announcement::with('user', 'category', 'currencyFrom', 'currencyTo')->where('id_user', Auth::id())->paginate(15);
+      return $this->successResponse($announcement);
     }
 }

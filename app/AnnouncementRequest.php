@@ -22,4 +22,9 @@ class AnnouncementRequest extends Model
        {
          return $this->belongsTo('App\Announcement', 'id_announcement');
        }
+
+       public function message()
+       {
+         return $this->hasMany('App\AnnouncementMessage', 'id_request');
+       }
 }

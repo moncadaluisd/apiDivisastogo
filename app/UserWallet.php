@@ -11,5 +11,6 @@ class UserWallet extends Model
     protected $fillable = [
       'id_user',
       'wallet',
+    
     ];
 }

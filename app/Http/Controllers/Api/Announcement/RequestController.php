@@ -6,7 +6,7 @@ use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Auth;
 use App\Announcement;
 use App\AnnouncementRequest;
-use Illuminate\Http\Request;
+use App\Http\Requests\Announcement\Request;
 
 class RequestController extends ApiController
 {
@@ -74,25 +74,7 @@ class RequestController extends ApiController
     {
 
         $announcementRequest =  AnnouncementRequest::with('announcement.user')->findOrFail($id);
-        if ($announcementRequest->state == 3) {
-          # code...
-          return $this->errorResponse('Esta transaccion esta cancelada', 401);
-        }
 
-        if ($announcementRequest->state == 2) {
-          # code...
-          return $this->errorResponse('Esta transaccion esta terminada', 401);
-        }
-
-
-
-        if (Auth::id() !== $announcementRequest->id_user_issuer || Auth::id() !== $announcementRequest->announcement->user->id) {
-          # code...
-          return $this->errorResponse('No tienes acceso a esta seccion', 401);
-        }
-        if ($announcementRequest->stateIssuer == 1 && $announcementRequest->stateRecipient == 1) {
-          return $this->errorResponse('Esta transaccion ya esta cerrada', 422);
-        }
         if ($announcementRequest->id_user_issuer == Auth::id()) {
           # code...
           $announcementRequest->stateIssuer = 1;

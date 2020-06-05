@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Announcement;
 
 use App\Http\Controllers\ApiController;
 use App\Announcement;
+use App\Currency;
 use Illuminate\Http\Request;
 
 class AnnouncementController extends ApiController
@@ -38,6 +39,13 @@ class AnnouncementController extends ApiController
 
     public function search($from, $to)
     {
+      $queryFrom = str_replace('-', ' ', $from);
+      $queryTo = str_replace('-', ' ', $to);
+
+      $currencyFrom = Currency::where('iso',  $queryFrom )->first();
+      $currencyTo = Currency::where('iso',  $queryTo)->first();
+      $getQuery = Announcement::with('user', 'category', 'currencyFrom', 'currencyTo')->where([['id_currency_from', '=', $currencyFrom->id],['id_currency_to', '=', $currencyTo->id] ])->paginate(15);
+     return $this->successResponse($getQuery);
 
     }
 }

@@ -29,7 +29,7 @@ class User extends Authenticatable implements JWTSubject
      * @var array
      */
     protected $hidden = [
-        'password', 'token_verify','google_auth_code','email_token', 'phone_token', 'id_level'
+        'password', 'token_verify','google_auth_code','email_token', 'phone_token', 'id_level', 'remember_token', 'state', 'email_verify', 'verified', 'phone_verify'
     ];
 
     /*
@@ -95,6 +95,11 @@ class User extends Authenticatable implements JWTSubject
     public function payment()
     {
       return $this->hasMany('App\UserPayment', 'id_user');
+    }
+
+    public function wallet()
+    {
+      return $this->hasMany('App\UserWallet', 'id_user');
     }
 
 

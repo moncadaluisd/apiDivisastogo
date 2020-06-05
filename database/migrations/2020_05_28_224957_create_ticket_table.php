@@ -19,6 +19,7 @@ class CreateTicketTable extends Migration
             $table->unsignedBigInteger('id_user');
             $table->text('message');
             $table->string('upload', 120)->nullable();
+            $table->integer('state')->default(1); //1: abierto 2: cerrado;
 
             $table->foreign('id_category')->references('id')->on('tickets_categories')->onDelete('cascade');
             $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');

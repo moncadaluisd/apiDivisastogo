@@ -17,8 +17,8 @@ class CreateCategoriesTable extends Migration
             $table->id();
 
             $table->string('name', 200);
-            $table->string('icon',80);
-            $table->boolean('state')->default(false); 
+            $table->string('icon',80)->nullable();
+            $table->boolean('state')->default(true);
         });
     }
 

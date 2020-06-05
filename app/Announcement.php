@@ -15,7 +15,8 @@ class Announcement extends Model
      * @var array
      */
     protected $fillable = [
-         'id_user', 'id_currency_from', 'id_currency_to', 'id_category', 'title', 'description', 'price', 'min', 'max', 'percetange', 'state'
+         'id_user', 'id_currency_from', 'id_currency_to', 'id_category', 'title', 'description', 'price', 'min', 'max', 'percetange',
+          'state'
        ];
 
 
@@ -38,4 +39,6 @@ class Announcement extends Model
       {
         return $this->belongsTo('App\Category', 'id_user');
       }
+
+
 }
