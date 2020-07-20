@@ -10,6 +10,12 @@ class UserController extends ApiController
 {
 
 
+    public function index()
+    {
+      $users = User::paginate(15);
+      return $this->successResponse($users);
+    }
+
     /**
      * Display the specified resource.
      *

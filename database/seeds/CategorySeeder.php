@@ -17,9 +17,6 @@ class CategorySeeder extends Seeder
           'name' => 'Compra',
         ]);
 
-        $category = Category::create([
-          'name' => 'Compra',
-        ]);
 
         $category = Category::create([
           'name' => 'Anuncios',

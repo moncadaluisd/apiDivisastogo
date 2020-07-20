@@ -15,7 +15,7 @@ class User extends Authenticatable implements JWTSubject
 
 
     /**
-     * The attributes that are mass assignable.
+     * The attributes that are mass assignable.s
      *
      * @var array
      */
@@ -62,7 +62,7 @@ class User extends Authenticatable implements JWTSubject
      */
     public function data()
     {
-      return $this->hasMany('App\UserData', 'id_user');
+      return $this->hasOne('App\UserData', 'id_user');
     }
 
     /*
@@ -99,8 +99,17 @@ class User extends Authenticatable implements JWTSubject
 
     public function wallet()
     {
-      return $this->hasMany('App\UserWallet', 'id_user');
+      return $this->hasOne('App\UserWallet', 'id_user');
     }
+
+    public function announcements()
+    {
+      return $this->hasMany('App\announcement', 'id_user');
+    }
+
+  
+
+
 
 
 

@@ -16,11 +16,12 @@ class CreateAnnouncementsMessageTable extends Migration
         Schema::create('announcements_message', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_request');
-            $table->integer('type'); //1:receptor 2:emisor
+            $table->unsignedBigInteger('id_user');
             $table->text('message');
             $table->string('upload', 120)->nullable();
 
             $table->foreign('id_request')->references('id')->on('announcements_request')->onDelete('cascade');
+            $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

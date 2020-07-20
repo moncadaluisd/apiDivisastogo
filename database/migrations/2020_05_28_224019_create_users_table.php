@@ -32,11 +32,11 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_level');
+            $table->unsignedBigInteger('id_level'); // 1 admin //2 soporte // 3 cajero // 4 usuario
             $table->string('username', 20)->unique();
             $table->string('email', 255)->unique();
             $table->string('password', 255);
-            $table->string('phone', 20)->nullable()->unique();
+            $table->string('phone', 30)->nullable()->unique();
 
             $table->boolean('email_verify')->default(0);
             $table->boolean('phone_verify')->default(0);

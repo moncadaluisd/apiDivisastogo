@@ -25,8 +25,8 @@ class UserPaymentsRequest extends FormRequest
     {
         return [
             //
-            'upload' => 'required',
-            'monto' => 'required'
+            'upload' => '',
+            'amount' => 'required'
         ];
     }
 }

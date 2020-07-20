@@ -2,20 +2,12 @@
 
 namespace App\Http\Controllers\Api\Admin\Ticket;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use Illuminate\Http\Request;
+use App\TicketCategory;
 
-class TicketCategoryController extends Controller
+class TicketCategoryController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -26,6 +18,11 @@ class TicketCategoryController extends Controller
     public function store(Request $request)
     {
         //
+        $rules = ['name' => 'string|min:5|max:255'];
+        $this->validate($rules,$request);
+        $category = TicketCategory::create($request->all());
+
+        return $this->successResponse($category, 'Se ha creado correctamente');
     }
 
     /**
@@ -37,6 +34,8 @@ class TicketCategoryController extends Controller
     public function show($id)
     {
         //
+        $ticket = TicketCategory::with('tickets')->findOrFail($id);
+        return $this->successResponse($ticket);
     }
 
     /**
@@ -49,6 +48,11 @@ class TicketCategoryController extends Controller
     public function update(Request $request, $id)
     {
         //
+        $rules = ['name' => 'string|min:5|max:255'];
+        $this->validate($rules,$request);
+        $category = TicketCategory::findOrFail($id)->update($request->all());
+
+        return $this->successResponse($category, 'Se ha creado correctamente');
     }
 
     /**
@@ -60,5 +64,9 @@ class TicketCategoryController extends Controller
     public function destroy($id)
     {
         //
+        $category = TicketCategory::findOrFail($id);
+        $category->delete();
+
+        return $this->successResponse($category, 'Se ha eliminado correctamente');
     }
 }

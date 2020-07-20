@@ -26,6 +26,7 @@ class CreatePlanTable extends Migration
             $table->string('name', 100);
             $table->integer('duration'); //1:Year - 2:Month
             $table->float('price', 10,2);
+            $table->unsignedBigInteger('id_user_level');
             $table->mediumText('description');
         });
     }

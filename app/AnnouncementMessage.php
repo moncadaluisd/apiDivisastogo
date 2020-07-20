@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class AnnouncementMessage extends Model
 {
     //
-    protected $table = 'announcements_messages';
+    protected $table = 'announcements_message';
 
     /**
      * The attributes that are mass assignable.

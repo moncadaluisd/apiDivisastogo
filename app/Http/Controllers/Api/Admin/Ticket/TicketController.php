@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\Admin\Ticket;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use App\Ticket;
 
 class TicketController extends Controller
 {
@@ -15,6 +16,8 @@ class TicketController extends Controller
     public function index()
     {
         //
+        $tickets = Ticket::paginate(15);
+        return $this->succcessResponse($tickets);
     }
 
     /**
@@ -37,6 +40,8 @@ class TicketController extends Controller
     public function show($id)
     {
         //
+        $ticket = TicketCategory::with('tickets')->findOrFail($id);
+        return $this->successResponse($ticket);
     }
 
     /**

@@ -40,5 +40,10 @@ class Announcement extends Model
         return $this->belongsTo('App\Category', 'id_user');
       }
 
+      public function requests()
+      {
+        return $this->hasMany('App\AnnouncementRequest', 'id_announcement');
+      }
+
 
 }

@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Broadcast;
+use App\AnnouncementRequest;
+use App\Announcement;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +15,13 @@ use Illuminate\Support\Facades\Broadcast;
 |
 */
 
-Broadcast::channel('App.User.{id}', function ($user, $id) {
-    return (int) $user->id === (int) $id;
+Broadcast::channel('chat.{id}', function ($user, $id) {
+  $request = AnnouncementRequest::findOrFail($id);
+  $tipo = Announcement::findOrFail($request->id_announcement);
+    return (int) Auth::id() === (int) $request->id_user_issuer || (int) Auth::id() === (int) $tipo->id_user;
+
+});
+
+Broadcast::channel('user.id', function ($id) {
+    return (int) Auth::id() === (int) $id;
 });

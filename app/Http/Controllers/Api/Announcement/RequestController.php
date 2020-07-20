@@ -6,6 +6,7 @@ use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Auth;
 use App\Announcement;
 use App\AnnouncementRequest;
+use Illuminate\Support\Str;
 use App\Http\Requests\Announcement\Request;
 
 class RequestController extends ApiController
@@ -19,8 +20,9 @@ class RequestController extends ApiController
     {
         //
 
-        $announcement = AnnouncementRequest::where([
+        $announcement = AnnouncementRequest::with(['announcement.user', 'announcement.currencyFrom', 'announcement.currencyTo'])->where([
           ['id_user_issuer', Auth::id()],
+          ['state', 1],
         ])->get();
         return $this->successResponse($announcement);
     }
@@ -34,11 +36,23 @@ class RequestController extends ApiController
     public function store(Request $request)
     {
         //
+        $otherRequest = AnnouncementRequest::where([
+          ['id_user_issuer', '=', Auth::id()],
+          ['state', '=', '1'],
+          ['id_announcement', '=', $request->id_announcement]
+        ])->count();
+        if ($otherRequest > 0) {
+          # code...
+          return $this->errorResponse('Ya tienes una transaccion abierta con este cajero, por favor terminala o cancelala y podras abrir una nuevamente.', 401);
+        }
+        $request['code'] = Str::random(40);
         $request['id_user_issuer'] = Auth::id();
+        $request['state'] = 1;
         $announcement = Announcement::findOrFail($request->id_announcement);
         $request['price'] = $announcement->price;
         $request['min'] = $announcement->min;
         $request['max'] = $announcement->max;
+
         $announcementRequest = AnnouncementRequest::create($request->all());
         return $this->successResponse($announcementRequest, 'Se ha creado correctamente');
     }
@@ -53,7 +67,7 @@ class RequestController extends ApiController
     {
         //
 
-        $announcementRequest = AnnouncementRequest::with('announcement.user')->findOrFail($id);
+        $announcementRequest = AnnouncementRequest::with('announcement.user')->where('code', $id)->first();
         if (Auth::id() == $announcementRequest->id_user_issuer || Auth::id() == $announcementRequest->announcement->user->id) {
           # code...
           return $this->successResponse($announcementRequest);
@@ -87,8 +101,10 @@ class RequestController extends ApiController
 
         if ($announcementRequest->stateIssuer == 1 && $announcementRequest->stateRecipient == 1) {
           # code...
-          $announcementRequest->state = 3;
+          $announcementRequest->state = 2;
         }
+
+
 
         $announcementRequest->save();
         return $this->successResponse($announcementRequest, 'Se ha finalizado la transaccion');
@@ -106,26 +122,17 @@ class RequestController extends ApiController
         //
     }
 
-    public function cancelRequest(Request $request)
+    public function cancelRequest(Request $request, $id)
     {
       $announcementRequest =  AnnouncementRequest::with('announcement.user')->findOrFail($id);
 
-      if (Auth::id() !== $announcementRequest->announcement->user->id) {
+
+
+      if ($announcementRequest->id_user_issuer == Auth::id()) {
         # code...
         return $this->errorResponse('No tienes acceso a esta seccion', 401);
       }
-
-      if ($announcementRequest->state == 3) {
-        # code...
-        return $this->errorResponse('Esta transaccion esta cancelada', 401);
-      }
-
-      if ($announcementRequest->state == 2) {
-        # code...
-        return $this->errorResponse('Esta transaccion esta terminada', 401);
-      }
-
-      $announcementRequest->state = 2;
+      $announcementRequest->state = 3;
       $announcementRequest->save();
       return $this->successResponse($announcementRequest, 'Se ha cancelado la transaccion');
 
@@ -136,17 +143,17 @@ class RequestController extends ApiController
     switch ($request) {
       case 'cancelado':
         # code...
-        $announcementRequest =  AnnouncementRequest::where('state', 3)->where('id_user_issuer', Auth::id())->paginate(10);
+        $announcementRequest =  AnnouncementRequest::with(['announcement.user', 'announcement.currencyFrom', 'announcement.currencyTo'])->where('state', 3)->where('id_user_issuer', Auth::id())->paginate(10);
         break;
 
      case 'terminado':
        # code...
-       $announcementRequest =  AnnouncementRequest::where('state', 2)->where('id_user_issuer', Auth::id())->paginate(10);
+       $announcementRequest =  AnnouncementRequest::with(['announcement.user', 'announcement.currencyFrom', 'announcement.currencyTo'])->where('state', 2)->where('id_user_issuer', Auth::id())->paginate(10);
        break;
 
      case 'abierto':
        # code...
-      $announcementRequest =  AnnouncementRequest::where('state', 1)->where('id_user_issuer', Auth::id())->paginate(10);
+      $announcementRequest =  AnnouncementRequest::with(['announcement.user', 'announcement.currencyFrom', 'announcement.currencyTo'])->where('state', 1)->where('id_user_issuer', Auth::id())->paginate(10);
        break;
 
       default:

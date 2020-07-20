@@ -15,7 +15,7 @@ class AnnouncementRequest extends Model
      * @var array
      */
     protected $fillable = [
-         'id_announcement', 'id_user_issuer', 'amount', 'pay', 'stateIssuer', 'stateRecipient', 'price', 'min', 'max'
+         'id_announcement', 'id_user_issuer', 'amount', 'pay', 'stateIssuer', 'stateRecipient', 'price', 'min', 'max', 'code'
        ];
 
        public function announcement()
@@ -26,5 +26,10 @@ class AnnouncementRequest extends Model
        public function message()
        {
          return $this->hasMany('App\AnnouncementMessage', 'id_request');
+       }
+
+       public function user()
+       {
+         return $this->belongsTo('App\User', 'id_user_issuer');
        }
 }

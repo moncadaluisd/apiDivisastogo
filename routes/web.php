@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use App\Announcement;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -15,4 +15,12 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
+});
+
+Route::get('/prueba', 'Api\Announcement\BuyerRequestController@index');
+Route::get('/prueba2', function(){
+  $app = Announcement::whereHas('requests', function($q) {
+                         $q->where("id","=",3);
+                     })->first();
+  return $app;
 });
