@@ -34,6 +34,6 @@ class UserSeeder extends Seeder
        'id_user' => 1,
        'wallet' => 0
        ]);
-        $users = factory(App\User::class, 50)->create();
+        //$users = factory(App\User::class, 50)->create();
     }
 }

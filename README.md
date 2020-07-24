@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # README #
 
 This README would normally document whatever steps are necessary to get your application up and running.
@@ -109,3 +110,7 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 >>>>>>> master
+=======
+# apiDivisastogo
+Desarrollgo api de divisasotog
+>>>>>>> 88c72cbedf63ce2da152f5b98e257218e138f80a
