@@ -10,9 +10,9 @@ use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 
-class UserNotification
+class UserNotification implements ShouldBroadcast
 {
-    use Dispatchable, InteractsWithSockets, SerializesModels;
+    use Dispatchable, InteractsWithSockets;
 
     public $userId;
     public $data;
@@ -27,6 +27,7 @@ class UserNotification
         //
         $this->userId = $userId;
         $this->data = $data;
+        
     }
 
     /**

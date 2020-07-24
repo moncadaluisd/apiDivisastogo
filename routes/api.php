@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::apiResource('/password/reset', 'Api\Auth\ResetPasswordController');
+Route::apiResource('/profile', 'Api\ProfileController');
+
 Route::apiResource('category', 'Api\CategoryController', [
   'only' => ['index', 'show']
 ]);
@@ -32,12 +35,10 @@ Route::apiResource('ticket/category', 'Api\Ticket\TicketCategoryController', [
   'only' => ['index', 'show']
 ]);
 
-Route::apiResource('reset', 'Api\Auth\ResetPasswordController', [
-  'only' => ['store', 'show']
-]);
+
 
 Route::apiResource('register', 'Api\Auth\RegisterController', [
-  'only' => ['store', 'show']
+  'only' => ['store', 'update']
 ]);
 
 Route::apiResource('login', 'Api\Auth\LoginController', [
@@ -53,6 +54,8 @@ Route::middleware(['auth.jwt'])->group(function () {
   Route::get('buyer/payments/wallet', 'Api\Buyer\PaymentsController@wallet');
   Route::get('buyer/payments/{request}', 'Api\Buyer\PaymentsController@index' );
   Route::post('buyer/payments',    'Api\Buyer\PaymentsController@store');
+
+  Route::resource('notification', 'Api\NotificationController');
 
 
 Route::apiResource('me', 'Api\User\UserController', [
@@ -108,7 +111,6 @@ Route::group(['namespace' => 'Api\Admin', 'as' => 'admin.', 'prefix' => 'admin']
     'only' => ['store', 'update', 'delete']
   ]);
 
-  Route::apiResource('level', 'User\UserLevelController');
 
 });
 });

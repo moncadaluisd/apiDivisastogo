@@ -51,6 +51,7 @@ class CreateAnnouncementController extends ApiController
           # code...
           return $this->errorResponse('No puedes crear un post con las monedas iguales', 401);
         }
+        $request['id_category'] = 1;
         $announcement = Announcement::create($request->all());
         $data = Announcement::with('user', 'category', 'currencyFrom', 'currencyTo')->findOrFail($announcement->id);
         return $this->successResponse($data, 'Se ha creado correctamente');

@@ -41,10 +41,16 @@ class MessageRequest extends Notification
      */
     public function toMail($notifiable)
     {
+        
         return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
+                ->subject('Nueva Notificacion')
+                ->markdown('email.notification', [
+                    'url' => $this->data['url'],
+                    'username' => $this->data['username'], 
+                    'description' => $this->data['description'],
+                    'title' => $this->data['title'] ,
+                    'button' => $this->data['button'],
+                    ]);
     }
 
     /**
@@ -60,6 +66,8 @@ class MessageRequest extends Notification
           'url'  => $this->data['url'],
           'title' => $this->data['title'],
           'description'   =>  $this->data['description'],
+          'username' => $this->data['username'],
+          'button' => $this->data['button'],
           'time'  =>  Carbon::now()->diffForHumans(),
       ];
     }

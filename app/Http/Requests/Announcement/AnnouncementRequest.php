@@ -27,7 +27,6 @@ class AnnouncementRequest extends FormRequest
             //
             'id_currency_from' => 'required',
             'id_currency_to' => 'required',
-            'id_category' => 'required',
             'title' => 'required|string|max:100',
             'description' => 'required',
             'price' => 'required',

@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\Announcement;
 
-use App\Http\Controllers\ApiController;
-use Illuminate\Support\Facades\Auth;
 use App\Announcement;
-use App\AnnouncementRequest;
 use Illuminate\Support\Str;
+use App\AnnouncementRequest;
+use App\Events\UserNotification;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ApiController;
 use App\Http\Requests\Announcement\Request;
 
 class RequestController extends ApiController
@@ -48,12 +49,23 @@ class RequestController extends ApiController
         $request['code'] = Str::random(40);
         $request['id_user_issuer'] = Auth::id();
         $request['state'] = 1;
-        $announcement = Announcement::findOrFail($request->id_announcement);
+        $announcement = Announcement::with('user')->findOrFail($request->id_announcement);
         $request['price'] = $announcement->price;
         $request['min'] = $announcement->min;
         $request['max'] = $announcement->max;
 
         $announcementRequest = AnnouncementRequest::create($request->all());
+
+        
+
+        $data = array(
+          'username' => $announcement->user->username,
+          'url' => '/chat/' . $announcementRequest->id,
+          'title' => 'Nueva transaccion Codigo #' . $announcementRequest->id,
+          'description' => 'Se ha creado una nueva transaccion con el post '. $announcement->title,
+          'button' => 'Ir al Chat'
+        );
+        broadcast(new UserNotification($data, $announcement->user->id));
         return $this->successResponse($announcementRequest, 'Se ha creado correctamente');
     }
 
@@ -87,20 +99,54 @@ class RequestController extends ApiController
     public function update(Request $request, $id)
     {
 
-        $announcementRequest =  AnnouncementRequest::with('announcement.user')->findOrFail($id);
+        $announcementRequest =  AnnouncementRequest::with('user','announcement.user')->findOrFail($id);
 
         if ($announcementRequest->id_user_issuer == Auth::id()) {
           # code...
           $announcementRequest->stateIssuer = 1;
+          $data = array(
+            'username' => $announcementRequest->announcement->user->username,
+            'url' => '/chat/' . $announcementRequest->id,
+            'title' => $announcementRequest->user->username ." Finalizo su parte de la transaccion",
+            'description' => ' Faltas tu culiminar para cerrar la transaccion. Entra al chat y termina la negociacion.',
+            'button' => 'Ir al Chat'
+          );
+          broadcast(new UserNotification($data, $announcementRequest->announcement->user->id));
         }
 
         if ($announcementRequest->announcement->user->id == Auth::id()) {
           # code...
+
+          $data = array(
+            'username' => $announcementRequest->user->username,
+            'url' => '/chat/' . $announcementRequest->id,
+            'title' => $announcementRequest->announcement->user->username ." finalizo su parte de la transaccion",
+            'description' => ' Faltas tu culiminar para cerrar la transaccion. Entra al chat y termina la negociacion.',
+            'button' => 'Ir al Chat'
+          );
+          broadcast(new UserNotification($data, $announcementRequest->user->id));
           $announcementRequest->stateRecipient = 1;
         }
 
         if ($announcementRequest->stateIssuer == 1 && $announcementRequest->stateRecipient == 1) {
           # code...
+          $data = array(
+            'username' => $announcementRequest->user->username,
+            'url' => '/chat/' . $announcementRequest->id,
+            'title' => "Se termino la negociacion",
+            'description' => 'Notificacion de que se ha culminado el chat',
+            'button' => 'Ir al Chat'
+          );
+          broadcast(new UserNotification($data, $announcementRequest->user->id));
+
+          $data = array(
+            'username' => $announcementRequest->announcement->user->username,
+            'url' => '/chat/' . $announcementRequest->id,
+            'title' => $announcementRequest->user->username ." Finalizo su parte de la transaccion",
+            'description' => ' Faltas tu culiminar para cerrar la transaccion. Entra al chat y termina la negociacion.',
+            'button' => 'Ir al Chat'
+          );
+          broadcast(new UserNotification($data, $announcementRequest->announcement->user->id));
           $announcementRequest->state = 2;
         }
 

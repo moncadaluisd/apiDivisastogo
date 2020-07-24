@@ -15,6 +15,6 @@ class Rating extends Model
      * @var array
      */
     protected $fillable = [
-         'id_user_issuer', 'id_user_recipient', 'value', 'rating_date'
+         'id_user_issuer', 'id_user_recipient', 'value'
        ];
 }

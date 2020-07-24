@@ -8,6 +8,8 @@ use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\UserPreference;
 use App\UserWallet;
+use App\Mail\VerificationMail;
+use Mail;
 use App\Http\Requests\RegisterUserRequest as Request;
 
 class RegisterController extends ApiController
@@ -124,6 +126,10 @@ class RegisterController extends ApiController
       'id_user' => $user->id,
       'wallet' => 0
       ]);
+
+
+      Mail::to($user->email)
+           ->queue(new VerificationMail($user, 'Este correo es para verificar tu usuario y puedas empezar a usar la plataforma'));
       return $this->successResponse($user, 'Se ha creado el usuario correctamente');
 
 
@@ -135,7 +141,7 @@ class RegisterController extends ApiController
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($token)
+    public function update($token)
     {
       $user = User::where('email_token', $token)->first();
       $user->email_verify = 1;

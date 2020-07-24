@@ -7,6 +7,9 @@ use App\User;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Mail\ResetPassword;
+use Illuminate\Support\Facades\Hash;
+use Mail;
 
 class ResetPasswordController extends ApiController
 {
@@ -33,12 +36,36 @@ class ResetPasswordController extends ApiController
         $user->remember_token = Str::random(40);
         $user->save();
 
-        return $this->successResponse('', 'Se ha enviado el correo correctamente');
+        Mail::to($user->email)
+             ->queue(new ResetPassword($user));
+
+        return $this->successResponse('', 'Se ha enviado un correo para cambiar la clave.');
 
     }
 
+   /**
+   * Display the specified resource.
+   *
+   * @param  int  $id
+   * @return \Illuminate\Http\Response
+   */
 
 
+  public function show($id)
+  {
+      //
+      $user = User::where('remember_token', $id)->first();
+
+      return $this->successResponse($user);
+  }
+
+
+    /* Update the specified resource in storage.
+    *
+    * @param  \Illuminate\Http\Request  $request
+    * @param  \App\User  $user
+    * @return \Illuminate\Http\Response
+    */
     public function update(Request $request, $id)
     {
       $rules = [

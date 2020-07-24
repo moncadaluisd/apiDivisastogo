@@ -23,5 +23,10 @@ class AnnouncementMessage extends Model
          return $this->belongsTo('App\User', 'id_user');
        }
 
+       public function request()
+       {
+         return $this->belongsTo('App\AnnouncementRequest', 'id_request');
+       }
+
 
 }

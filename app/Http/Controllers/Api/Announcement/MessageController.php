@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers\Api\Announcement;
 
-use App\Http\Controllers\ApiController;
-use App\AnnouncementRequest;
 use App\AnnouncementMessage;
+use App\AnnouncementRequest;
 use Illuminate\Http\Request;
+use App\Events\UserNotification;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\ApiController;
 use App\Events\AnnouncementMessage as event;
 
 class MessageController extends ApiController
@@ -50,13 +51,35 @@ class MessageController extends ApiController
           return $this->errorResponse('No tienes acceso a esta seccion ', 401);
       }
 
+      $fun = $this->image($request->upload, 'chat', $announcement->id);
+      $image = $fun['image'];
+
+      $request['upload'] = $image;
+
       $message = AnnouncementMessage::create($request->all());
 
-      $messageGet =  AnnouncementMessage::with('user')->where('id', $message->id)->firstOrFail();
-      broadcast(new event($messageGet->id_request,$messageGet));
+      $messageGet =  AnnouncementMessage::with('user', 'request.announcement')->where('id', $message->id)->firstOrFail();
+      broadcast(new event($messageGet->request->id,$messageGet));
+
+      if ($id === $messageGet->request->user->id){
+          $idMail = $message->request->announcement->id_user;
+      }else{
+        $idMail = $messageGet->request->user->id;
+      }
+      
+      $data = array(
+        'username' => $messageGet->user->username,
+        'url' => '/chat/' . $messageGet->id_request,
+        'title' => 'Tienes una nueva notificacion del chat ' . $messageGet->id_request,
+        'description' => 'el mensaje dice: ' . $messageGet->message,
+        'button' => 'Ir al Chat'
+      );
+      broadcast(new UserNotification($data, $idMail));
       return $this->successResponse($message, 'El mensaje se ha enviado correctamente');
 
     }
+
+
 
 
 }

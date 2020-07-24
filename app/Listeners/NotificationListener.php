@@ -7,7 +7,7 @@ use App\User;
 use App\Notifications\MessageRequest;
 use Illuminate\Queue\InteractsWithQueue;
 
-class NotificationListener
+class NotificationListener implements ShouldQueue
 {
     /**
      * Create the event listener.
@@ -28,7 +28,7 @@ class NotificationListener
     public function handle($event)
     {
         //
-        $when = now()->addMinutes(10);
+        $when = now()->addMinutes(1);
         User::findOrFail($event->userId)
         ->notify((new MessageRequest($event->data))->delay($when));
 

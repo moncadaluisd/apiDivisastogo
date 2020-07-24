@@ -83,7 +83,7 @@ class LoginController extends ApiController
     $comprador = ($user->id_level == 2) ? true : false;
     $data = array('info' => $user, 'token' => $token, 'token_type' => 'Bearer', 'admin' => $admin, 'comprador' => $comprador);
 
-    if (empty(auth()->user()->email_verified_at))
+    if (!auth()->user()->verified)
  {
      return response()->json(['error' => 'No has verificado el correo.'], 401);
  }
